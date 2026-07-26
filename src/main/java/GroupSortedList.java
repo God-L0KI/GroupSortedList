@@ -67,6 +67,39 @@ public class GroupSortedList<E> extends AbstractList<E> implements Serializable 
         return getGroup(0);
    }
 
+
+    int getGroupIndex(String name){
+        for(int i = 0; i < groupSize; i++){
+            if(Objects.equals(getGroup(i).getName(), name)){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public void moveGroupPos(int targetIndex, int sourceIndex) {
+        Objects.checkIndex(targetIndex, groupSize);
+        Objects.checkIndex(sourceIndex, groupSize);
+
+        Group<E> group = groupList[sourceIndex];
+        if(sourceIndex > targetIndex){
+            for (int i = sourceIndex; i > targetIndex; i--) {
+                groupList[i] = groupList[i - 1];
+            }
+        }else {
+            for (int i = sourceIndex; i < targetIndex; i++) {
+                groupList[i] = groupList[i + 1];
+            }
+        }
+
+
+        groupList[targetIndex] = group;
+    }
+
+    public void moveGroupPos(int targetIndex, String groupName) {
+        moveGroupPos(targetIndex, getGroupIndex(groupName));
+    }
+
     @Override
     public int size() {
         for(int i = 0; i < groupSize; i++){
@@ -95,10 +128,12 @@ public class GroupSortedList<E> extends AbstractList<E> implements Serializable 
         return (E)  ellements[0];
     }
 
-    private static class Group< E> extends AbstractList<E> implements Cloneable, Serializable, GroupView<E> {
+    private static class Group< E> extends AbstractList<E> implements Cloneable, Serializable, GroupView<E>, GlobalIndexMap {
         private Object[] elements = new Object[0];
         private String name;
         private int size;
+        private int[] globalIndexList = new int[size];
+        private int[] range = new int[2];
 
         public Group(){
             size = elements.length;
@@ -149,7 +184,30 @@ public class GroupSortedList<E> extends AbstractList<E> implements Serializable 
         public E getFirst() {
             return get(0);
         }
+
+        public void setRange(int s,int f){
+            this.range[0] = s;
+            this.range[1] = f;
+        }
+
+        public void setGlobalIndex(int index){
+
+        }
+
+        @Override
+        public int[] getRange() {
+            return range;
+        }
+
+        @Override
+        public int getGlobalIndex() {
+            return 0;
+        }
     }
 
+    private interface GlobalIndexMap{
+    int[] getRange();
+    int getGlobalIndex();
+    }
 
 }
