@@ -10,8 +10,10 @@ public class GroupSortedList<E> extends AbstractList<E> implements Serializable 
     private int size;
 
 
+    @SuppressWarnings("unchecked")
     public GroupSortedList(){
-        this.size = size();
+        groupList = new Group[0];
+        this.size = 0;
         this.groupSize = groupList.length;
     }
 
