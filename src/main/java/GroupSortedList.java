@@ -2,10 +2,9 @@ import java.io.Serializable;
 import java.util.AbstractList;
 import java.util.Objects;
 
-//Todo: Какогото хуя группы становятся типом Integer
+///List what is sorted by groups, but get a list of common items.
 public class GroupSortedList<E> extends AbstractList<E> implements Serializable {
-    //Основной массив будет тут, он будет собираться тута типо, готовый массив который будет собиратся из групп или независимых элеметов
-    private Group[] groupList = new Group[0];
+    private Group<E>[] groupList;
     private int groupSize;
     private int size;
 
@@ -19,8 +18,10 @@ public class GroupSortedList<E> extends AbstractList<E> implements Serializable 
 
 
 
-    private Group createGroup(Object obj){
-         return new Group<Object>();
+    private Group<E> create_group(String name){
+        Group<E> group = new Group<>();
+        group.setName(name);
+         return group;
     }
 
 
@@ -35,11 +36,11 @@ public class GroupSortedList<E> extends AbstractList<E> implements Serializable 
     }
 
 
-    public void createGroug(Object object){
-        putGroup(createGroup(object));
+    public void createGroup(String name){
+        putGroup(create_group(name));
     }
 
-    private Group groupIndex(int index){
+    private Group<E> groupIndex(int index){
         return this.groupList[index];
     }
 
@@ -48,21 +49,30 @@ public class GroupSortedList<E> extends AbstractList<E> implements Serializable 
        return this.groupIndex(index);
    }
 
+   public GroupView<E> getGroup(String name){
+        for(int i = 0; i < groupSize; i++){
+        if(getGroup(i).getName().equals(name)){
+            return getGroup(i);
+             }
+        }
+
+        return null;
+   }
+   
    public GroupView<E> getLastGroup(){
-        return getGroup(groupSize);
+        return getGroup(groupSize - 1);
    }
 
-   public GroupView getFirstGroup(){
+   public GroupView<E> getFirstGroup(){
         return getGroup(0);
    }
 
     @Override
-    public E get(int i) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public int size() {
+        for(int i = 0; i < groupSize; i++){
+            this.size = getGroup(i).size() + this.size;
+        }
+
         return size;
     }
 
@@ -71,15 +81,37 @@ public class GroupSortedList<E> extends AbstractList<E> implements Serializable 
     }
 
 
+    @Override
+    public E get(int i) {
+        Object[] ellements = new Object[size];
+        for(i = 0; i < groupSize; i++){
+            for(int k = 0; k < getGroup(i).size(); k++){
+                for (int n = 0; n < size; n++){
+                    ellements[n] = getGroup(i).get(k);
+                }
+            }
+        }
 
+        return (E)  ellements[0];
+    }
 
-    //Тут будет Группы которые собираются из подгруп или так
-    private static class Group<E> extends AbstractList<E> implements Cloneable, Serializable, GroupView<E> {
+    private static class Group< E> extends AbstractList<E> implements Cloneable, Serializable, GroupView<E> {
         private Object[] elements = new Object[0];
+        private String name;
         private int size;
 
         public Group(){
             size = elements.length;
+        }
+
+
+        @Override
+        public String getName(){
+            return this.name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
         }
 
         public void put(E obj){
@@ -108,6 +140,16 @@ public class GroupSortedList<E> extends AbstractList<E> implements Serializable 
             return size;
         }
 
+        @Override
+        public E getLast() {
+            return get(size - 1);
+        }
+
+        @Override
+        public E getFirst() {
+            return get(0);
+        }
     }
+
 
 }
