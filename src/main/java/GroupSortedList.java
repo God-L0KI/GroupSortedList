@@ -2,6 +2,7 @@ import java.io.Serializable;
 import java.util.AbstractList;
 import java.util.Objects;
 
+//Todo: Какогото хуя группы становятся типом Integer
 public class GroupSortedList<E> extends AbstractList<E> implements Serializable {
     //Основной массив будет тут, он будет собираться тута типо, готовый массив который будет собиратся из групп или независимых элеметов
     private Group[] groupList = new Group[0];
@@ -32,7 +33,7 @@ public class GroupSortedList<E> extends AbstractList<E> implements Serializable 
     }
 
 
-    private void createGroug(Object object){
+    public void createGroug(Object object){
         putGroup(createGroup(object));
     }
 
@@ -45,6 +46,13 @@ public class GroupSortedList<E> extends AbstractList<E> implements Serializable 
        return this.groupIndex(index);
    }
 
+   public GroupView<E> getLastGroup(){
+        return getGroup(groupSize);
+   }
+
+   public GroupView getFirstGroup(){
+        return getGroup(0);
+   }
 
     @Override
     public E get(int i) {
