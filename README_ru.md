@@ -34,7 +34,7 @@ repositories {
 }
 
 dependencies {
-1    implementation "io.github.god-l0ki:groupsortedlist:0.1.1"
+    implementation "io.github.god-l0ki:groupsortedlist:0.1.1"
 }
 ```
 
@@ -162,16 +162,6 @@ System.out.println(list.get(2)); // 30
 
 ---
 
-# Совместимость
-
-- Java 17+
-- Maven Central
-- MIT License
-
----
-
 # Лицензия
 
 Проект распространяется по лицензии MIT.
-
-Подробности см. в файле [LICENSE](LICENSE).
