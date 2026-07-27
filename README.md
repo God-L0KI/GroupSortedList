@@ -1,27 +1,35 @@
 # GroupSortedList
 
-> A Java collection that stores elements in named groups while exposing them as one continuous indexed list.
+> A Java collection that stores elements in named groups while exposing them as a single indexed list.
+
+![Java](https://img.shields.io/badge/Java-17%2B-orange)
+![License](https://img.shields.io/badge/license-MIT-green)
+![Status](https://img.shields.io/badge/status-Experimental-blue)
+
+🇺🇸 English | 🇷🇺 [Русский](README_ru.md)
+
+---
 
 ## Overview
 
-**GroupSortedList** is a custom Java collection designed for situations where data should remain logically grouped while still behaving like a regular list.
+`GroupSortedList` is an experimental Java collection that combines grouped storage with flat list access.
 
-Instead of storing every element in a single array, the collection stores elements inside independent named groups. Each group manages its own elements, while the collection provides a single global index over all groups.
+Instead of storing every element inside one continuous array, elements are organized into named groups while still behaving like one logical list.
 
-This allows grouped organization without sacrificing simple indexed access.
+Every group owns a global index range, allowing constant local access after locating the corresponding group.
 
 ---
 
 ## Features
 
-* Named groups
-* Access groups by name or index
-* Global element indexing
-* Automatic global index range calculation
-* Reorder groups without rebuilding the collection
-* Built on `AbstractList`
-* Serializable
-* Designed to be lightweight and extensible
+- Named groups
+- Global indexing
+- Access elements by a single index
+- Access groups by index or name
+- Move groups without rebuilding the collection
+- Automatic global index range recalculation
+- Serializable
+- Built on top of `AbstractList`
 
 ---
 
@@ -30,12 +38,12 @@ This allows grouped organization without sacrificing simple indexed access.
 ```java
 GroupSortedList<Integer> list = new GroupSortedList<>();
 
-list.createGroup("Numbers");
-list.getGroup("Numbers").put(10);
-list.getGroup("Numbers").put(20);
+list.createGroup("First");
+list.getGroup("First").put(10);
+list.getGroup("First").put(20);
 
-list.createGroup("Other");
-list.getGroup("Other").put(30);
+list.createGroup("Second");
+list.getGroup("Second").put(30);
 
 System.out.println(list.get(0)); // 10
 System.out.println(list.get(1)); // 20
@@ -44,91 +52,70 @@ System.out.println(list.get(2)); // 30
 
 ---
 
-## Internal structure
+## How it works
 
-Each group owns its own storage.
+Each group stores its own collection of elements.
 
-The collection assigns every group a global index range.
+The collection automatically assigns a global index range to every group.
 
-```text
+Example:
+
+```
 Global List
 
 0 1 2 3 4 5 6 7 8
 
-┌──────────────┐
-│ Group A      │
-│ Range: 0..2  │
-└──────────────┘
+┌────────────┐
+│ Group A    │
+│ 0 1 2      │
+└────────────┘
 
-┌──────────────┐
-│ Group B      │
-│ Range: 3..6  │
-└──────────────┘
+┌────────────┐
+│ Group B    │
+│ 3 4 5 6    │
+└────────────┘
 
-┌──────────────┐
-│ Group C      │
-│ Range: 7..8  │
-└──────────────┘
+┌────────────┐
+│ Group C    │
+│ 7 8        │
+└────────────┘
 ```
 
-When `get(index)` is called, the collection:
+When `get(index)` is called:
 
-1. Finds the group whose range contains the requested index.
-2. Converts the global index into a local group index.
-3. Returns the corresponding element.
-
----
-
-## Why?
-
-Most Java collections store every element in one continuous structure.
-
-GroupSortedList is intended for applications where elements naturally belong to separate categories but should still be accessible as a single ordered collection.
-
-Possible use cases include:
-
-* registries
-* grouped game objects
-* resource collections
-* categorized datasets
-* plugin systems
-* configuration sections
+1. Find the group whose range contains the global index.
+2. Convert the global index into the group's local index.
+3. Return the requested element.
 
 ---
 
-## Current status
+## Current Status
 
-This project is under active development.
+This project is currently under active development.
 
 ### Implemented
 
-* Group creation
-* Group lookup by name and index
-* Group reordering
-* Automatic global range calculation
-* Global indexed access
+- Group creation
+- Group lookup by name
+- Group lookup by index
+- Group reordering
+- Global index ranges
+- Global element access
 
 ### Planned
 
-* Add/remove operations
-* Iterators
-* Stream support
-* Binary search over group ranges
-* Performance optimizations
-* Full JavaDoc documentation
+- Element insertion/removal
+- Iterators
+- Streams support
+- Binary search over group ranges
+- Performance improvements
+- Full JavaDoc
+- Unit tests
 
 ---
 
-## Project goals
+## License
 
-The primary goal of this project is to provide a reusable collection that combines:
+This project is licensed under the MIT License.
 
-* logical grouped storage;
-* simple list-like access;
-* clean API;
-* good performance;
-* easy extensibility.
-
----
-
-
+See the [LICENSE](LICENSE) file for details.
