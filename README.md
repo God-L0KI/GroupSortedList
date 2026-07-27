@@ -34,7 +34,7 @@ repositories {
 }
 
 dependencies {
-    implementation "io.github.god-l0ki:groupsortedlist:0.1.0"
+    implementation "io.github.god-l0ki:groupsortedlist:0.1.1"
 }
 ```
 
@@ -44,7 +44,7 @@ dependencies {
 <dependency>
     <groupId>io.github.god-l0ki</groupId>
     <artifactId>groupsortedlist</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
 </dependency>
 ```
 
