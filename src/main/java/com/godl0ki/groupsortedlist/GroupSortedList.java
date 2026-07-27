@@ -1,3 +1,5 @@
+package com.godl0ki.groupsortedlist;
+
 import java.io.Serializable;
 import java.util.AbstractList;
 import java.util.Objects;
@@ -201,12 +203,10 @@ public class GroupSortedList<E> extends AbstractList<E> implements Serializable 
             return size;
         }
 
-        @Override
         public E getLast() {
             return get(size - 1);
         }
 
-        @Override
         public E getFirst() {
             return get(0);
         }

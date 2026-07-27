@@ -1,4 +1,4 @@
-import java.io.Serializable;
+package com.godl0ki.groupsortedlist;
 
 public interface GroupView<E> {
     void put(E obj);

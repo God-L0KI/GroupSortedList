@@ -1,20 +1,102 @@
 plugins {
-    id 'java'
+    id "java-library"
+    id "maven-publish"
+    id "signing"
 }
 
-group = 'org.l0ki'
-version = '1.0-SNAPSHOT'
+group = "io.github.god-l0ki"
+version = "0.1.0"
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    testImplementation platform('org.junit:junit-bom:6.0.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testImplementation platform("org.junit:junit-bom:6.0.0")
+    testImplementation "org.junit.jupiter:junit-jupiter"
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher"
 }
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+
+    withSourcesJar()
+    withJavadocJar()
+}
+
+publishing {
+    publications {
+
+        mavenJava(MavenPublication) {
+
+            from components.java
+
+            groupId = project.group
+            artifactId = "groupsortedlist"
+            version = project.version
+
+            pom {
+
+                name = "GroupSortedList"
+
+                description = "A Java collection that stores elements in named groups while exposing them as one indexed list."
+
+                url = "https://github.com/God-L0KI/GroupSortedList"
+
+                licenses {
+
+                    license {
+
+                        name = "MIT License"
+
+                        url = "https://opensource.org/licenses/MIT"
+
+                    }
+
+                }
+
+                developers {
+
+                    developer {
+
+                        id = "God-L0KI"
+
+                        name = "L0KI"
+
+                        email = "agodofl0ki@gmail.com"
+
+                    }
+
+                }
+
+                scm {
+
+                    connection = "scm:git:https://github.com/God-L0KI/GroupSortedList.git"
+
+                    developerConnection = "scm:git:ssh://git@github.com:God-L0KI/GroupSortedList.git"
+
+                    url = "https://github.com/God-L0KI/GroupSortedList"
+
+                }
+
+            }
+
+        }
+
+    }
+}
+
+signing {
+    useGpgCmd()
+    sign publishing.publications.mavenJava
+}
+
 
 test {
     useJUnitPlatform()
+}
+
+nmcp {
 }

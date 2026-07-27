@@ -2,7 +2,8 @@
 
 > A Java collection that stores elements in named groups while exposing them as a single indexed list.
 
-![Java](https://img.shields.io/badge/Java-17%2B-orange)
+![Maven Central](https://img.shields.io/maven-central/v/io.github.god-l0ki/groupsortedlist)
+![Java](https://img.shields.io/badge/Java-17+-orange)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Status](https://img.shields.io/badge/status-Experimental-blue)
 
@@ -10,33 +11,63 @@
 
 ---
 
-## Overview
+# Why com.godl0ki.groupsortedlist.GroupSortedList?
 
-`GroupSortedList` is an experimental Java collection that combines grouped storage with flat list access.
-
-Instead of storing every element inside one continuous array, elements are organized into named groups while still behaving like one logical list.
-
-Every group owns a global index range, allowing constant local access after locating the corresponding group.
-
----
-
-## Features
+Java provides many collection implementations, but none of them combine:
 
 - Named groups
 - Global indexing
-- Access elements by a single index
-- Access groups by index or name
-- Move groups without rebuilding the collection
+- List-like access
+- Independent group manipulation
+
+`com.godl0ki.groupsortedlist.GroupSortedList` solves this problem while keeping the API familiar to Java developers.
+
+---
+
+# Installation
+
+## Gradle
+
+```gradle
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "io.github.god-l0ki:groupsortedlist:0.1.0"
+}
+```
+
+## Maven
+
+```xml
+<dependency>
+    <groupId>io.github.god-l0ki</groupId>
+    <artifactId>groupsortedlist</artifactId>
+    <version>0.1.0</version>
+</dependency>
+```
+
+---
+
+# Features
+
+- Named groups
+- Global indexing
+- Flat list access
+- Group lookup by name
+- Group lookup by index
+- Group reordering
 - Automatic global index range recalculation
 - Serializable
 - Built on top of `AbstractList`
 
 ---
 
-## Example
+# Example
 
 ```java
-GroupSortedList<Integer> list = new GroupSortedList<>();
+com.godl0ki.groupsortedlist.GroupSortedList<Integer> list = new com.godl0ki.groupsortedlist.GroupSortedList<>();
 
 list.createGroup("First");
 list.getGroup("First").put(10);
@@ -52,13 +83,11 @@ System.out.println(list.get(2)); // 30
 
 ---
 
-## How it works
+# How it works
 
 Each group stores its own collection of elements.
 
-The collection automatically assigns a global index range to every group.
-
-Example:
+Every group owns a global index range.
 
 ```
 Global List
@@ -81,40 +110,67 @@ Global List
 └────────────┘
 ```
 
-When `get(index)` is called:
+When calling `get(index)`:
 
-1. Find the group whose range contains the global index.
-2. Convert the global index into the group's local index.
-3. Return the requested element.
-
----
-
-## Current Status
-
-This project is currently under active development.
-
-### Implemented
-
-- Group creation
-- Group lookup by name
-- Group lookup by index
-- Group reordering
-- Global index ranges
-- Global element access
-
-### Planned
-
-- Element insertion/removal
-- Iterators
-- Streams support
-- Binary search over group ranges
-- Performance improvements
-- Full JavaDoc
-- Unit tests
+1. Locate the group containing the global index.
+2. Convert the global index into a local group index.
+3. Return the element.
 
 ---
 
-## License
+# Complexity
+
+| Operation | Complexity |
+|------------|-----------:|
+| createGroup | O(1) |
+| get(index) | O(groups) |
+| getGroup(name) | O(groups) |
+| moveGroup() | O(groups) |
+| put() | O(1) |
+
+> Binary search over group ranges is planned, reducing global lookup to **O(log groups)**.
+
+---
+
+# Project Status
+
+## Implemented
+
+- ✅ Group creation
+- ✅ Group lookup by name
+- ✅ Group lookup by index
+- ✅ Group moving
+- ✅ Global indexing
+- ✅ Global element access
+- ✅ Serialization
+
+## Roadmap
+
+- ⬜ Element insertion/removal
+- ⬜ Iterators
+- ⬜ Stream support
+- ⬜ Binary search
+- ⬜ Performance improvements
+- ⬜ Full JavaDoc
+- ⬜ Unit tests
+
+---
+
+# Changelog
+
+See [CHANGELOG.md](CHANGELOG.md)
+
+---
+
+# Compatibility
+
+- Java 17+
+- Maven Central
+- MIT License
+
+---
+
+# License
 
 This project is licensed under the MIT License.
 
