@@ -11,7 +11,7 @@
 
 ---
 
-# Why com.godl0ki.groupsortedlist.GroupSortedList?
+# Why GroupSortedList?
 
 Java provides many collection implementations, but none of them combine:
 
